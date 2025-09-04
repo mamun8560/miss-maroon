@@ -9,6 +9,10 @@
       margin: 0;
       overflow: hidden;
       background: maroon;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
     }
 
     canvas {
@@ -16,8 +20,30 @@
       top: 0;
       left: 0;
     }
-    #miss{
-        color: wheat; align-items: center;justify-content: center;display: flex;padding-top: 20px;
+
+    #miss {
+      color: wheat;
+      position: relative;
+      text-align: center;
+      margin-top: 20px;
+      font-size: 2rem; /* default for PC */
+      z-index: 1;
+    }
+
+    /* Tablet & smaller devices */
+    @media (max-width: 768px) {
+      #miss {
+        font-size: 1.5rem;
+        margin-top: 10px;
+      }
+    }
+
+    /* Small mobile devices */
+    @media (max-width: 480px) {
+      #miss {
+        font-size: 1.2rem;
+        margin-top: 5px;
+      }
     }
   </style>
 </head>
@@ -102,11 +128,22 @@
     // Initialize Heart Particles
     function initHeart() {
       particles = [];
+
+      // responsive scaling
+      let scale, size;
+      if (window.innerWidth <= 480) { 
+        scale = 8; size = 3;   // small mobile
+      } else if (window.innerWidth <= 768) {
+        scale = 12; size = 5;  // tablet
+      } else {
+        scale = 15; size = 7;  // desktop
+      }
+
       for (let t = 0; t < Math.PI * 2; t += 0.05) {
         let heart = heartFunction(t);
-        let x = heart.x * 15;
-        let y = heart.y * 15;
-        particles.push(new Particle(x, y, 7, "wheat"));
+        let x = heart.x * scale;
+        let y = heart.y * scale;
+        particles.push(new Particle(x, y, size, "wheat"));
       }
     }
 
